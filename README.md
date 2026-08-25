@@ -2,7 +2,7 @@
 
 # Windows Security Demonstration
 
-**A controlled Windows scripting demonstration showing how much a user-level script can do immediately after execution — without requiring administrator/UAC elevation.**
+**See how much a Windows script can create, modify, and delete without asking for administrator permission.**
 
 [![Platform](https://img.shields.io/badge/Platform-Windows-0078D4?logo=windows&logoColor=white)](#requirements)
 [![PowerShell](https://img.shields.io/badge/PowerShell-5%2B-5391FE?logo=powershell&logoColor=white)](#tech-stack)
@@ -20,11 +20,11 @@
 
 The project demonstrates a simple but important security concept:
 
-> **A program does not need administrator privileges to perform meaningful actions on a Windows system.**
+> **Without asking for administrator permission, a script can create new files, modify files, and delete almost any file or folder that the current user has access to.**
 
-When the user opens the `.bat` file, it launches the PowerShell demonstration. The current version transparently collects basic system information, creates a Desktop folder, generates a report, creates a demonstration wallpaper, changes the current user's wallpaper, and provides a restore option.
+It can also create completely new files in different formats such as `.txt`, `.png`, `.mp4`, `.pdf`, `.zip`, and more. The current demonstration shows this concept through controlled system-information collection, file creation, report generation, wallpaper modification, and a restore option.
 
-The goal is not to create malware. The goal is to make the security implication visible: **a file that looks simple can execute a chain of actions using the permissions already available to the current user.**
+The goal is not to create malware. The goal is to make the security implication easy to understand: **opening a script gives it the same permissions available to the user who launched it.**
 
 ---
 
@@ -99,6 +99,51 @@ This project makes that idea visible through a controlled demonstration.
 
 ---
 
+## The Most Important Capability
+
+The most important part of this project is **file-system access**.
+
+A script running without administrator privileges can still have significant control over files and folders that the current user is allowed to access.
+
+### It can create files
+
+A program does not need a special permission for each file type. It can create completely new files such as:
+
+```text
+example.txt
+image.png
+video.mp4
+document.pdf
+archive.zip
+data.bin
+```
+
+The file extension is not the security boundary. The important question is whether the process has permission to write to that location.
+
+### It can delete files and folders
+
+It can delete **almost any file or folder that the current user has permission to delete**.
+
+That can include:
+
+- Personal files
+- Downloaded files
+- Documents
+- Images
+- Videos
+- User-created folders
+- Other writable data
+
+Protected Windows/system locations or files that the current user cannot access are a different boundary and may reject the operation.
+
+### Why this matters
+
+For a normal user, the important takeaway is:
+
+> **No administrator prompt does not mean a script is harmless.**
+
+If you give a script permission to run as your user, it can potentially perform the file operations that you are allowed to perform.
+
 ## What This Demo Does
 
 ### 🖥️ Collects System Information
@@ -112,13 +157,11 @@ The PowerShell script retrieves:
 - Primary screen resolution
 - Current date and time
 
-### 📁 Creates a Desktop Folder
+### 📁 Creates and Writes Files
 
-Creates:
+Creates a Desktop folder and writes new files into it.
 
-```text
-Desktop/CyberSecurity_Demo/
-```
+The same Windows file-writing capability can be used for many file types, depending on the data supplied to the file.
 
 ### 📝 Generates a Report
 
@@ -267,6 +310,19 @@ Future demonstrations could show additional categories of information available 
 - Additional operating-system configuration
 
 The purpose would be to demonstrate **information exposure**, not to collect or transmit real sensitive data.
+
+### 🗑️ File & Folder Deletion Demonstration
+
+A controlled lab could create dummy files and folders, then demonstrate what an ordinary user-level process can remove when it has write/delete permission.
+
+This can teach:
+
+- Why writable data is important
+- The difference between user-owned and protected files
+- Why a lack of UAC does not protect personal data
+- How destructive file operations can become dangerous when triggered by untrusted code
+
+The demonstration should remain restricted to intentionally created lab data.
 
 ### 📂 File Permission Demonstration
 
